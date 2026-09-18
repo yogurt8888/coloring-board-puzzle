@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# 跑流水线产生的中间件与试跑产物
+_pipeline/
+out/
+/tmp/
+*.log

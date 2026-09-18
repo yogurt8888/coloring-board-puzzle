@@ -1,0 +1,7 @@
+# 文本一律用 LF 入库：脚本要在 Linux / macOS 上跑，CRLF 只会带来麻烦
+* text=auto eol=lf
+
+# 二进制，不要做任何换行/合并转换
+*.png binary
+*.ttf binary
+*.jpg binary

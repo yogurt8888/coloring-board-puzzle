@@ -1,0 +1,537 @@
+============================================================================
+独立复核（格子级洪水填充实现，不复用 solve_fast.py）
+棋盘 7 行 x 9 列；可用色 RGYB；目标 蓝
+当前连通块总数 = 17
+============================================================================
+
+同格法最短步数 = 5
+同格法最短解共 72 条，覆盖 29 个可点格
+
+----------------------------------------------------------------------------
+按点击格列出（每格的可行颜色顺序 + 每步染色格数）
+----------------------------------------------------------------------------
+点 第1行第4列（起始色B）:
+     红 → 黄 → 绿 → 红 → 蓝   每步染色 [11, 29, 38, 52, 58]   -> 共5步
+     黄 → 蓝 → 红 → 绿 → 蓝   每步染色 [11, 20, 22, 46, 60]   -> 共5步
+     黄 → 绿 → 红 → 绿 → 蓝   每步染色 [11, 20, 28, 52, 58]   -> 共5步
+     黄 → 红 → 绿 → 红 → 蓝   每步染色 [11, 20, 38, 52, 58]   -> 共5步
+点 第1行第8列（起始色R）:
+     蓝 → 黄 → 绿 → 红 → 蓝   每步染色 [12, 26, 35, 49, 61]   -> 共5步
+点 第2行第4列（起始色B）:
+     红 → 黄 → 绿 → 红 → 蓝   每步染色 [11, 29, 38, 52, 58]   -> 共5步
+     黄 → 蓝 → 红 → 绿 → 蓝   每步染色 [11, 20, 22, 46, 60]   -> 共5步
+     黄 → 绿 → 红 → 绿 → 蓝   每步染色 [11, 20, 28, 52, 58]   -> 共5步
+     黄 → 红 → 绿 → 红 → 蓝   每步染色 [11, 20, 38, 52, 58]   -> 共5步
+点 第2行第6列（起始色B）:
+     红 → 黄 → 绿 → 红 → 蓝   每步染色 [11, 29, 38, 52, 58]   -> 共5步
+     黄 → 蓝 → 红 → 绿 → 蓝   每步染色 [11, 20, 22, 46, 60]   -> 共5步
+     黄 → 绿 → 红 → 绿 → 蓝   每步染色 [11, 20, 28, 52, 58]   -> 共5步
+     黄 → 红 → 绿 → 红 → 蓝   每步染色 [11, 20, 38, 52, 58]   -> 共5步
+点 第2行第7列（起始色R）:
+     蓝 → 黄 → 绿 → 红 → 蓝   每步染色 [12, 26, 35, 49, 61]   -> 共5步
+点 第2行第8列（起始色R）:
+     蓝 → 黄 → 绿 → 红 → 蓝   每步染色 [12, 26, 35, 49, 61]   -> 共5步
+点 第3行第4列（起始色B）:
+     红 → 黄 → 绿 → 红 → 蓝   每步染色 [11, 29, 38, 52, 58]   -> 共5步
+     黄 → 蓝 → 红 → 绿 → 蓝   每步染色 [11, 20, 22, 46, 60]   -> 共5步
+     黄 → 绿 → 红 → 绿 → 蓝   每步染色 [11, 20, 28, 52, 58]   -> 共5步
+     黄 → 红 → 绿 → 红 → 蓝   每步染色 [11, 20, 38, 52, 58]   -> 共5步
+点 第3行第5列（起始色B）:
+     红 → 黄 → 绿 → 红 → 蓝   每步染色 [11, 29, 38, 52, 58]   -> 共5步
+     黄 → 蓝 → 红 → 绿 → 蓝   每步染色 [11, 20, 22, 46, 60]   -> 共5步
+     黄 → 绿 → 红 → 绿 → 蓝   每步染色 [11, 20, 28, 52, 58]   -> 共5步
+     黄 → 红 → 绿 → 红 → 蓝   每步染色 [11, 20, 38, 52, 58]   -> 共5步
+点 第3行第6列（起始色B）:
+     红 → 黄 → 绿 → 红 → 蓝   每步染色 [11, 29, 38, 52, 58]   -> 共5步
+     黄 → 蓝 → 红 → 绿 → 蓝   每步染色 [11, 20, 22, 46, 60]   -> 共5步
+     黄 → 绿 → 红 → 绿 → 蓝   每步染色 [11, 20, 28, 52, 58]   -> 共5步
+     黄 → 红 → 绿 → 红 → 蓝   每步染色 [11, 20, 38, 52, 58]   -> 共5步
+点 第3行第7列（起始色R）:
+     蓝 → 黄 → 绿 → 红 → 蓝   每步染色 [12, 26, 35, 49, 61]   -> 共5步
+点 第4行第4列（起始色B）:
+     红 → 黄 → 绿 → 红 → 蓝   每步染色 [11, 29, 38, 52, 58]   -> 共5步
+     黄 → 蓝 → 红 → 绿 → 蓝   每步染色 [11, 20, 22, 46, 60]   -> 共5步
+     黄 → 绿 → 红 → 绿 → 蓝   每步染色 [11, 20, 28, 52, 58]   -> 共5步
+     黄 → 红 → 绿 → 红 → 蓝   每步染色 [11, 20, 38, 52, 58]   -> 共5步
+点 第4行第6列（起始色B）:
+     红 → 黄 → 绿 → 红 → 蓝   每步染色 [11, 29, 38, 52, 58]   -> 共5步
+     黄 → 蓝 → 红 → 绿 → 蓝   每步染色 [11, 20, 22, 46, 60]   -> 共5步
+     黄 → 绿 → 红 → 绿 → 蓝   每步染色 [11, 20, 28, 52, 58]   -> 共5步
+     黄 → 红 → 绿 → 红 → 蓝   每步染色 [11, 20, 38, 52, 58]   -> 共5步
+点 第4行第7列（起始色R）:
+     蓝 → 黄 → 绿 → 红 → 蓝   每步染色 [12, 26, 35, 49, 61]   -> 共5步
+点 第4行第8列（起始色R）:
+     蓝 → 黄 → 绿 → 红 → 蓝   每步染色 [12, 26, 35, 49, 61]   -> 共5步
+点 第5行第3列（起始色B）:
+     黄 → 蓝 → 红 → 绿 → 蓝   每步染色 [1, 10, 22, 46, 60]   -> 共5步
+点 第5行第4列（起始色Y）:
+     蓝 → 红 → 绿 → 黄 → 蓝   每步染色 [5, 18, 42, 56, 60]   -> 共5步
+     蓝 → 红 → 黄 → 绿 → 蓝   每步染色 [5, 18, 42, 46, 60]   -> 共5步
+     蓝 → 黄 → 红 → 绿 → 蓝   每步染色 [5, 18, 22, 46, 60]   -> 共5步
+点 第5行第6列（起始色B）:
+     红 → 黄 → 绿 → 红 → 蓝   每步染色 [11, 29, 38, 52, 58]   -> 共5步
+     黄 → 蓝 → 红 → 绿 → 蓝   每步染色 [11, 20, 22, 46, 60]   -> 共5步
+     黄 → 绿 → 红 → 绿 → 蓝   每步染色 [11, 20, 28, 52, 58]   -> 共5步
+     黄 → 红 → 绿 → 红 → 蓝   每步染色 [11, 20, 38, 52, 58]   -> 共5步
+点 第5行第7列（起始色R）:
+     蓝 → 黄 → 绿 → 红 → 蓝   每步染色 [12, 26, 35, 49, 61]   -> 共5步
+点 第5行第8列（起始色R）:
+     蓝 → 黄 → 绿 → 红 → 蓝   每步染色 [12, 26, 35, 49, 61]   -> 共5步
+点 第6行第3列（起始色Y）:
+     蓝 → 红 → 绿 → 黄 → 蓝   每步染色 [5, 18, 42, 56, 60]   -> 共5步
+     蓝 → 红 → 黄 → 绿 → 蓝   每步染色 [5, 18, 42, 46, 60]   -> 共5步
+     蓝 → 黄 → 红 → 绿 → 蓝   每步染色 [5, 18, 22, 46, 60]   -> 共5步
+点 第6行第4列（起始色Y）:
+     蓝 → 红 → 绿 → 黄 → 蓝   每步染色 [5, 18, 42, 56, 60]   -> 共5步
+     蓝 → 红 → 黄 → 绿 → 蓝   每步染色 [5, 18, 42, 46, 60]   -> 共5步
+     蓝 → 黄 → 红 → 绿 → 蓝   每步染色 [5, 18, 22, 46, 60]   -> 共5步
+点 第6行第6列（起始色B）:
+     红 → 黄 → 绿 → 红 → 蓝   每步染色 [11, 29, 38, 52, 58]   -> 共5步
+     黄 → 蓝 → 红 → 绿 → 蓝   每步染色 [11, 20, 22, 46, 60]   -> 共5步
+     黄 → 绿 → 红 → 绿 → 蓝   每步染色 [11, 20, 28, 52, 58]   -> 共5步
+     黄 → 红 → 绿 → 红 → 蓝   每步染色 [11, 20, 38, 52, 58]   -> 共5步
+点 第6行第7列（起始色R）:
+     蓝 → 黄 → 绿 → 红 → 蓝   每步染色 [12, 26, 35, 49, 61]   -> 共5步
+点 第6行第8列（起始色R）:
+     蓝 → 黄 → 绿 → 红 → 蓝   每步染色 [12, 26, 35, 49, 61]   -> 共5步
+点 第7行第3列（起始色Y）:
+     蓝 → 红 → 绿 → 黄 → 蓝   每步染色 [5, 18, 42, 56, 60]   -> 共5步
+     蓝 → 红 → 黄 → 绿 → 蓝   每步染色 [5, 18, 42, 46, 60]   -> 共5步
+     蓝 → 黄 → 红 → 绿 → 蓝   每步染色 [5, 18, 22, 46, 60]   -> 共5步
+点 第7行第4列（起始色Y）:
+     蓝 → 红 → 绿 → 黄 → 蓝   每步染色 [5, 18, 42, 56, 60]   -> 共5步
+     蓝 → 红 → 黄 → 绿 → 蓝   每步染色 [5, 18, 42, 46, 60]   -> 共5步
+     蓝 → 黄 → 红 → 绿 → 蓝   每步染色 [5, 18, 22, 46, 60]   -> 共5步
+点 第7行第6列（起始色B）:
+     红 → 黄 → 绿 → 红 → 蓝   每步染色 [11, 29, 38, 52, 58]   -> 共5步
+     黄 → 蓝 → 红 → 绿 → 蓝   每步染色 [11, 20, 22, 46, 60]   -> 共5步
+     黄 → 绿 → 红 → 绿 → 蓝   每步染色 [11, 20, 28, 52, 58]   -> 共5步
+     黄 → 红 → 绿 → 红 → 蓝   每步染色 [11, 20, 38, 52, 58]   -> 共5步
+点 第7行第7列（起始色R）:
+     蓝 → 黄 → 绿 → 红 → 蓝   每步染色 [12, 26, 35, 49, 61]   -> 共5步
+点 第7行第8列（起始色R）:
+     蓝 → 黄 → 绿 → 红 → 蓝   每步染色 [12, 26, 35, 49, 61]   -> 共5步
+
+----------------------------------------------------------------------------
+按颜色顺序聚合（用来挑最宽容的一条）
+----------------------------------------------------------------------------
+序列 黄 → 蓝 → 红 → 绿 → 蓝 ：可点格 12 个
+     (第1行第4列), (第2行第4列), (第2行第6列), (第3行第4列), (第3行第5列), (第3行第6列), (第4行第4列), (第4行第6列), (第5行第3列), (第5行第6列), (第6行第6列), (第7行第6列)
+序列 蓝 → 黄 → 绿 → 红 → 蓝 ：可点格 12 个
+     (第1行第8列), (第2行第7列), (第2行第8列), (第3行第7列), (第4行第7列), (第4行第8列), (第5行第7列), (第5行第8列), (第6行第7列), (第6行第8列), (第7行第7列), (第7行第8列)
+序列 红 → 黄 → 绿 → 红 → 蓝 ：可点格 11 个
+     (第1行第4列), (第2行第4列), (第2行第6列), (第3行第4列), (第3行第5列), (第3行第6列), (第4行第4列), (第4行第6列), (第5行第6列), (第6行第6列), (第7行第6列)
+序列 黄 → 红 → 绿 → 红 → 蓝 ：可点格 11 个
+     (第1行第4列), (第2行第4列), (第2行第6列), (第3行第4列), (第3行第5列), (第3行第6列), (第4行第4列), (第4行第6列), (第5行第6列), (第6行第6列), (第7行第6列)
+序列 黄 → 绿 → 红 → 绿 → 蓝 ：可点格 11 个
+     (第1行第4列), (第2行第4列), (第2行第6列), (第3行第4列), (第3行第5列), (第3行第6列), (第4行第4列), (第4行第6列), (第5行第6列), (第6行第6列), (第7行第6列)
+序列 蓝 → 红 → 绿 → 黄 → 蓝 ：可点格 5 个
+     (第5行第4列), (第6行第3列), (第6行第4列), (第7行第3列), (第7行第4列)
+序列 蓝 → 红 → 黄 → 绿 → 蓝 ：可点格 5 个
+     (第5行第4列), (第6行第3列), (第6行第4列), (第7行第3列), (第7行第4列)
+序列 蓝 → 黄 → 红 → 绿 → 蓝 ：可点格 5 个
+     (第5行第4列), (第6行第3列), (第6行第4列), (第7行第3列), (第7行第4列)
+
+----------------------------------------------------------------------------
+每条颜色顺序的逐步过程（各取一个代表格）
+----------------------------------------------------------------------------
+
+>>> 一直点 第1行第4列，顺序 红 → 黄 → 绿 → 红 → 蓝
+    初始:
+      R G Y B R G B R G
+      R G Y B R B R R B
+      R G Y B B B R B G
+      R G Y B R B R R G
+      R G B Y R B R R G
+      R B Y Y R B R R G
+      G G Y Y R B R R G
+    第1步 画红（染了 11 格）:
+      R G Y R R G B R G
+      R G Y R R R R R B
+      R G Y R R R R B G
+      R G Y R R R R R G
+      R G B Y R R R R G
+      R B Y Y R R R R G
+      G G Y Y R R R R G
+    第2步 画黄（染了 29 格）:
+      R G Y Y Y G B Y G
+      R G Y Y Y Y Y Y B
+      R G Y Y Y Y Y B G
+      R G Y Y Y Y Y Y G
+      R G B Y Y Y Y Y G
+      R B Y Y Y Y Y Y G
+      G G Y Y Y Y Y Y G
+    第3步 画绿（染了 38 格）:
+      R G G G G G B G G
+      R G G G G G G G B
+      R G G G G G G B G
+      R G G G G G G G G
+      R G B G G G G G G
+      R B G G G G G G G
+      G G G G G G G G G
+    第4步 画红（染了 52 格）:
+      R R R R R R B R R
+      R R R R R R R R B
+      R R R R R R R B R
+      R R R R R R R R R
+      R R B R R R R R R
+      R B R R R R R R R
+      R R R R R R R R R
+    第5步 画蓝（染了 58 格）:
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+
+>>> 一直点 第5行第4列，顺序 蓝 → 红 → 绿 → 黄 → 蓝
+    初始:
+      R G Y B R G B R G
+      R G Y B R B R R B
+      R G Y B B B R B G
+      R G Y B R B R R G
+      R G B Y R B R R G
+      R B Y Y R B R R G
+      G G Y Y R B R R G
+    第1步 画蓝（染了 5 格）:
+      R G Y B R G B R G
+      R G Y B R B R R B
+      R G Y B B B R B G
+      R G Y B R B R R G
+      R G B B R B R R G
+      R B B B R B R R G
+      G G B B R B R R G
+    第2步 画红（染了 18 格）:
+      R G Y R R G B R G
+      R G Y R R R R R B
+      R G Y R R R R B G
+      R G Y R R R R R G
+      R G R R R R R R G
+      R R R R R R R R G
+      G G R R R R R R G
+    第3步 画绿（染了 42 格）:
+      G G Y G G G B G G
+      G G Y G G G G G B
+      G G Y G G G G B G
+      G G Y G G G G G G
+      G G G G G G G G G
+      G G G G G G G G G
+      G G G G G G G G G
+    第4步 画黄（染了 56 格）:
+      Y Y Y Y Y Y B Y Y
+      Y Y Y Y Y Y Y Y B
+      Y Y Y Y Y Y Y B Y
+      Y Y Y Y Y Y Y Y Y
+      Y Y Y Y Y Y Y Y Y
+      Y Y Y Y Y Y Y Y Y
+      Y Y Y Y Y Y Y Y Y
+    第5步 画蓝（染了 60 格）:
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+
+>>> 一直点 第5行第4列，顺序 蓝 → 红 → 黄 → 绿 → 蓝
+    初始:
+      R G Y B R G B R G
+      R G Y B R B R R B
+      R G Y B B B R B G
+      R G Y B R B R R G
+      R G B Y R B R R G
+      R B Y Y R B R R G
+      G G Y Y R B R R G
+    第1步 画蓝（染了 5 格）:
+      R G Y B R G B R G
+      R G Y B R B R R B
+      R G Y B B B R B G
+      R G Y B R B R R G
+      R G B B R B R R G
+      R B B B R B R R G
+      G G B B R B R R G
+    第2步 画红（染了 18 格）:
+      R G Y R R G B R G
+      R G Y R R R R R B
+      R G Y R R R R B G
+      R G Y R R R R R G
+      R G R R R R R R G
+      R R R R R R R R G
+      G G R R R R R R G
+    第3步 画黄（染了 42 格）:
+      Y G Y Y Y G B Y G
+      Y G Y Y Y Y Y Y B
+      Y G Y Y Y Y Y B G
+      Y G Y Y Y Y Y Y G
+      Y G Y Y Y Y Y Y G
+      Y Y Y Y Y Y Y Y G
+      G G Y Y Y Y Y Y G
+    第4步 画绿（染了 46 格）:
+      G G G G G G B G G
+      G G G G G G G G B
+      G G G G G G G B G
+      G G G G G G G G G
+      G G G G G G G G G
+      G G G G G G G G G
+      G G G G G G G G G
+    第5步 画蓝（染了 60 格）:
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+
+>>> 一直点 第5行第4列，顺序 蓝 → 黄 → 红 → 绿 → 蓝
+    初始:
+      R G Y B R G B R G
+      R G Y B R B R R B
+      R G Y B B B R B G
+      R G Y B R B R R G
+      R G B Y R B R R G
+      R B Y Y R B R R G
+      G G Y Y R B R R G
+    第1步 画蓝（染了 5 格）:
+      R G Y B R G B R G
+      R G Y B R B R R B
+      R G Y B B B R B G
+      R G Y B R B R R G
+      R G B B R B R R G
+      R B B B R B R R G
+      G G B B R B R R G
+    第2步 画黄（染了 18 格）:
+      R G Y Y R G B R G
+      R G Y Y R Y R R B
+      R G Y Y Y Y R B G
+      R G Y Y R Y R R G
+      R G Y Y R Y R R G
+      R Y Y Y R Y R R G
+      G G Y Y R Y R R G
+    第3步 画红（染了 22 格）:
+      R G R R R G B R G
+      R G R R R R R R B
+      R G R R R R R B G
+      R G R R R R R R G
+      R G R R R R R R G
+      R R R R R R R R G
+      G G R R R R R R G
+    第4步 画绿（染了 46 格）:
+      G G G G G G B G G
+      G G G G G G G G B
+      G G G G G G G B G
+      G G G G G G G G G
+      G G G G G G G G G
+      G G G G G G G G G
+      G G G G G G G G G
+    第5步 画蓝（染了 60 格）:
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+
+>>> 一直点 第1行第8列，顺序 蓝 → 黄 → 绿 → 红 → 蓝
+    初始:
+      R G Y B R G B R G
+      R G Y B R B R R B
+      R G Y B B B R B G
+      R G Y B R B R R G
+      R G B Y R B R R G
+      R B Y Y R B R R G
+      G G Y Y R B R R G
+    第1步 画蓝（染了 12 格）:
+      R G Y B R G B B G
+      R G Y B R B B B B
+      R G Y B B B B B G
+      R G Y B R B B B G
+      R G B Y R B B B G
+      R B Y Y R B B B G
+      G G Y Y R B B B G
+    第2步 画黄（染了 26 格）:
+      R G Y Y R G Y Y G
+      R G Y Y R Y Y Y Y
+      R G Y Y Y Y Y Y G
+      R G Y Y R Y Y Y G
+      R G B Y R Y Y Y G
+      R B Y Y R Y Y Y G
+      G G Y Y R Y Y Y G
+    第3步 画绿（染了 35 格）:
+      R G G G R G G G G
+      R G G G R G G G G
+      R G G G G G G G G
+      R G G G R G G G G
+      R G B G R G G G G
+      R B G G R G G G G
+      G G G G R G G G G
+    第4步 画红（染了 49 格）:
+      R R R R R R R R R
+      R R R R R R R R R
+      R R R R R R R R R
+      R R R R R R R R R
+      R R B R R R R R R
+      R B R R R R R R R
+      R R R R R R R R R
+    第5步 画蓝（染了 61 格）:
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+
+>>> 一直点 第1行第4列，顺序 黄 → 红 → 绿 → 红 → 蓝
+    初始:
+      R G Y B R G B R G
+      R G Y B R B R R B
+      R G Y B B B R B G
+      R G Y B R B R R G
+      R G B Y R B R R G
+      R B Y Y R B R R G
+      G G Y Y R B R R G
+    第1步 画黄（染了 11 格）:
+      R G Y Y R G B R G
+      R G Y Y R Y R R B
+      R G Y Y Y Y R B G
+      R G Y Y R Y R R G
+      R G B Y R Y R R G
+      R B Y Y R Y R R G
+      G G Y Y R Y R R G
+    第2步 画红（染了 20 格）:
+      R G R R R G B R G
+      R G R R R R R R B
+      R G R R R R R B G
+      R G R R R R R R G
+      R G B R R R R R G
+      R B R R R R R R G
+      G G R R R R R R G
+    第3步 画绿（染了 38 格）:
+      R G G G G G B G G
+      R G G G G G G G B
+      R G G G G G G B G
+      R G G G G G G G G
+      R G B G G G G G G
+      R B G G G G G G G
+      G G G G G G G G G
+    第4步 画红（染了 52 格）:
+      R R R R R R B R R
+      R R R R R R R R B
+      R R R R R R R B R
+      R R R R R R R R R
+      R R B R R R R R R
+      R B R R R R R R R
+      R R R R R R R R R
+    第5步 画蓝（染了 58 格）:
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+
+>>> 一直点 第1行第4列，顺序 黄 → 绿 → 红 → 绿 → 蓝
+    初始:
+      R G Y B R G B R G
+      R G Y B R B R R B
+      R G Y B B B R B G
+      R G Y B R B R R G
+      R G B Y R B R R G
+      R B Y Y R B R R G
+      G G Y Y R B R R G
+    第1步 画黄（染了 11 格）:
+      R G Y Y R G B R G
+      R G Y Y R Y R R B
+      R G Y Y Y Y R B G
+      R G Y Y R Y R R G
+      R G B Y R Y R R G
+      R B Y Y R Y R R G
+      G G Y Y R Y R R G
+    第2步 画绿（染了 20 格）:
+      R G G G R G B R G
+      R G G G R G R R B
+      R G G G G G R B G
+      R G G G R G R R G
+      R G B G R G R R G
+      R B G G R G R R G
+      G G G G R G R R G
+    第3步 画红（染了 28 格）:
+      R R R R R R B R G
+      R R R R R R R R B
+      R R R R R R R B G
+      R R R R R R R R G
+      R R B R R R R R G
+      R B R R R R R R G
+      R R R R R R R R G
+    第4步 画绿（染了 52 格）:
+      G G G G G G B G G
+      G G G G G G G G B
+      G G G G G G G B G
+      G G G G G G G G G
+      G G B G G G G G G
+      G B G G G G G G G
+      G G G G G G G G G
+    第5步 画蓝（染了 58 格）:
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+
+>>> 一直点 第1行第4列，顺序 黄 → 蓝 → 红 → 绿 → 蓝
+    初始:
+      R G Y B R G B R G
+      R G Y B R B R R B
+      R G Y B B B R B G
+      R G Y B R B R R G
+      R G B Y R B R R G
+      R B Y Y R B R R G
+      G G Y Y R B R R G
+    第1步 画黄（染了 11 格）:
+      R G Y Y R G B R G
+      R G Y Y R Y R R B
+      R G Y Y Y Y R B G
+      R G Y Y R Y R R G
+      R G B Y R Y R R G
+      R B Y Y R Y R R G
+      G G Y Y R Y R R G
+    第2步 画蓝（染了 20 格）:
+      R G B B R G B R G
+      R G B B R B R R B
+      R G B B B B R B G
+      R G B B R B R R G
+      R G B B R B R R G
+      R B B B R B R R G
+      G G B B R B R R G
+    第3步 画红（染了 22 格）:
+      R G R R R G B R G
+      R G R R R R R R B
+      R G R R R R R B G
+      R G R R R R R R G
+      R G R R R R R R G
+      R R R R R R R R G
+      G G R R R R R R G
+    第4步 画绿（染了 46 格）:
+      G G G G G G B G G
+      G G G G G G G G B
+      G G G G G G G B G
+      G G G G G G G G G
+      G G G G G G G G G
+      G G G G G G G G G
+      G G G G G G G G G
+    第5步 画蓝（染了 60 格）:
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
+      B B B B B B B B B
