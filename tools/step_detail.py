@@ -70,6 +70,18 @@ def analyze(meta):
     assert size_after == cells_final, "终局不是全盘一色，出错了"
     print("  终局：全盘 %d 格变%s" % (cells_final, NAMES.get(target, target)))
 
+    # 还有哪些起点块能走出「同格法」最优解（供写文档时说明"宽容度"）
+    m2 = Model(grid, target, colors)
+    Lf, by_comp = m2.fixed_all(6)
+    print("  最短 %d 步；可用的起点块 %d 个：" % (Lf, len(by_comp)))
+    for ci2, seqs in sorted(by_comp.items(), key=lambda kv: m2.comp_first[kv[0]]):
+        cells = sorted((y + 1, x + 1) for y, x in m2.comps[ci2])
+        # by_comp[ci] 的每一项是 (seq, frames, sizes) 三元组，seq 才是颜色索引序列
+        orders = "、".join("".join(NAMES.get(colors[c], colors[c]) for c in item[0])
+                           for item in seqs[:2])
+        print("    块 %d 格 %s%s｜可行顺序: %s"
+              % (len(cells), cells, " ←推荐" if ci2 == ci else "", orders))
+
 
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("-")]
