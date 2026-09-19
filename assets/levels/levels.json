@@ -1,5 +1,5 @@
 {
- "version": 6,
+ "version": 7,
  "updated": "2026-09-20",
  "levels": {
   "1": {
@@ -369,6 +369,30 @@
    ],
    "cells_of_seq": 2,
    "png": "画盘16_通关路线.png"
+  },
+  "17": {
+   "level": 17,
+   "rows": 7,
+   "cols": 9,
+   "grid": "GGGYYYYYYYYBBBBBBYYGGRRRRYBYRYYYYBYBYRBBBBBGBYRRRRGGGBBBBBBRRRB",
+   "target": "Y",
+   "budget": 5,
+   "steps": 5,
+   "tap": [
+    2,
+    1
+   ],
+   "block_cells": 6,
+   "seq": "BRBGY",
+   "sizes": [
+    6,
+    17,
+    30,
+    41,
+    50
+   ],
+   "cells_of_seq": 18,
+   "png": "画盘17_通关路线.png"
   }
  }
 }
