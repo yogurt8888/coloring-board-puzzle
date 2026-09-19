@@ -1,4 +1,4 @@
-# 维护指南（第 13 关及以后怎么加）
+# 维护指南（第 14 关及以后怎么加）
 
 这份文件是给**仓库维护者**看的。只使用技能的人不需要读 —— README 里已经说明
 「新关卡会自动同步，不用重装」。
@@ -13,8 +13,8 @@
 3. 出成品图：
 
    ```bash
-   python scripts/pipeline.py --board examples/board_level13.txt --level 13 \
-       --target B --budget 5 --out assets/levels --no-cache
+   python scripts/pipeline.py --board examples/board_level14.txt --level 14 \
+       --target G --budget 5 --out assets/levels --no-cache
    ```
 
    首次必须加 `--no-cache`，否则可能被索引判成"与某个旧关卡相同"而直接复用旧图；
@@ -33,7 +33,7 @@
    git add -A && git commit && git push
    ```
 
-推送之后，装过技能的人不需要重装：下一次有人问「第 13 关怎么过」，
+推送之后，装过技能的人不需要重装：下一次有人问「第 14 关怎么过」，
 本地索引里没有 → 自动取远端 `levels.json` → 合并写回本地 + 补下成品图 → 秒回。
 也可以让他们手动跑一次 `python scripts/pipeline.py --sync-levels` 立刻拉全量。
 
@@ -76,6 +76,6 @@
 - [ ] 全新 clone 后同样全绿（验证成品图、字体都在仓库里）
 - [ ] `levels.json` 的 `version` 已递增
 - [ ] README 的「已解关卡」表与实际一致
-- [ ] 提交信息按目录分组（`assets:` / `scripts:` / `tools:` / `docs:` …），
-      这样 GitHub 文件列表里每个文件后面显示的描述才对应它的用途
+- [ ] 提交信息保持**简短一句话**（历史已压成单条 `v1.0.0`；以后加关卡用普通提交即可，
+      不要按目录写长描述 —— GitHub 文件列表那列会截断成「…」，很难看）
 - [ ] `git remote -v` 里不含明文 token
