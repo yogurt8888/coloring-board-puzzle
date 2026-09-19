@@ -1,4 +1,4 @@
-# 维护指南（第 14 关及以后怎么加）
+# 维护指南（第 15 关及以后怎么加）
 
 这份文件是给**仓库维护者**看的。只使用技能的人不需要读 —— README 里已经说明
 「新关卡会自动同步，不用重装」。
@@ -13,8 +13,8 @@
 3. 出成品图：
 
    ```bash
-   python scripts/pipeline.py --board examples/board_level14.txt --level 14 \
-       --target G --budget 5 --out assets/levels --no-cache
+   python scripts/pipeline.py --board examples/board_level15.txt --level 15 \
+       --target B --budget 5 --out assets/levels --no-cache
    ```
 
    首次必须加 `--no-cache`，否则可能被索引判成"与某个旧关卡相同"而直接复用旧图；
@@ -27,13 +27,22 @@
    它会自动扫描 `examples/` 下**全部** `board_level*.txt`（新增关卡不用改代码），
    并把 `assets/levels/levels.json` 的 `version` 加一 —— **用户端就是靠这个版本号
    判断"远端有更新"的**；
-5. 提交推送：
+5. 把这一关写进文档：`SKILL.md` 的索引表 + 详细解法、`README.md` 的关卡表。
+   写「第 N 步并了哪几片」之前**先跑一次**：
+
+   ```bash
+   python tools/step_detail.py 14
+   ```
+
+   它按 `levels.json` 里的 tap / seq 现算每一步并进来的原始色块（片数 / 格数 / 坐标）。
+   这一步别省：靠肉眼数格子写详解必错，本项目已经因此返工过一次。
+6. 提交推送：
 
    ```bash
    git add -A && git commit && git push
    ```
 
-推送之后，装过技能的人不需要重装：下一次有人问「第 14 关怎么过」，
+推送之后，装过技能的人不需要重装：下一次有人问「第 15 关怎么过」，
 本地索引里没有 → 自动取远端 `levels.json` → 合并写回本地 + 补下成品图 → 秒回。
 也可以让他们手动跑一次 `python scripts/pipeline.py --sync-levels` 立刻拉全量。
 
