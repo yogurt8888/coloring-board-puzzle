@@ -1,4 +1,4 @@
-# 维护指南（第 15 关及以后怎么加）
+# 维护指南（第 16 关及以后怎么加）
 
 这份文件是给**仓库维护者**看的。只使用技能的人不需要读 —— README 里已经说明
 「新关卡会自动同步，不用重装」。
@@ -13,7 +13,7 @@
 3. 出成品图：
 
    ```bash
-   python scripts/pipeline.py --board examples/board_level15.txt --level 15 \
+   python scripts/pipeline.py --board examples/board_level16.txt --level 16 \
        --target B --budget 5 --out assets/levels --no-cache
    ```
 
@@ -42,7 +42,7 @@
    git add -A && git commit && git push
    ```
 
-推送之后，装过技能的人不需要重装：下一次有人问「第 15 关怎么过」，
+推送之后，装过技能的人不需要重装：下一次有人问「第 16 关怎么过」，
 本地索引里没有 → 自动取远端 `levels.json` → 合并写回本地 + 补下成品图 → 秒回。
 也可以让他们手动跑一次 `python scripts/pipeline.py --sync-levels` 立刻拉全量。
 
@@ -72,7 +72,8 @@
 ## 三、版本号与兼容性
 
 - `levels.json` 的 `version` 每重建一次 +1；用户端只做「远端 version 比本地新就合并」，
-  不做降级。
+  不做降级。**连跑两次 `build_level_index.py` 会让 version 跳过若干号（无副作用，用户端只比大小），
+  但正式发布前建议只跑一次。**
 - 索引条目带 63 格逐格指纹，合并时按指纹与关号双重判断，不会把已有关卡覆盖坏。
 - 远端地址默认取 `raw.githubusercontent.com`；改域名 / 自建镜像设 `CB_LEVELS_BASE`
   指向放 `levels.json` 与成品图的目录即可。
