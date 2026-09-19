@@ -1,4 +1,4 @@
-# 维护指南（第 20 关及以后怎么加）
+# 维护指南（第 21 关及以后怎么加）
 
 这份文件是给**仓库维护者**看的。只使用技能的人不需要读 —— README 里已经说明
 「新关卡会自动同步，不用重装」。
@@ -13,7 +13,7 @@
 3. 出成品图：
 
    ```bash
-   python scripts/pipeline.py --board examples/board_level20.txt --level 20 \
+   python scripts/pipeline.py --board examples/board_level21.txt --level 21 \
        --target B --budget 5 --out assets/levels --no-cache
    ```
 
@@ -28,10 +28,12 @@
    并把 `assets/levels/levels.json` 的 `version` 加一 —— **用户端就是靠这个版本号
    判断"远端有更新"的**；
 5. 把这一关写进文档：`SKILL.md` 的索引表 + 详细解法、`README.md` 的关卡表。
+   **别漏了 `SKILL.md` frontmatter 里的 `description`** —— 那句「自带 1~N 关答案索引」容易忘记同步。
+   另外若新关卡的「可点格 / 起点块」比旧关更宽或更窄，记得回去改旧关卡里"1~N 关里最窄/最宽松"这类相对说法。
    写「第 N 步并了哪几片」之前**先跑一次**：
 
    ```bash
-   python tools/step_detail.py 19
+   python tools/step_detail.py 20
    ```
 
    它按 `levels.json` 里的 tap / seq 现算每一步并进来的原始色块（片数 / 格数 / 坐标），
@@ -43,7 +45,7 @@
    git add -A && git commit && git push
    ```
 
-推送之后，装过技能的人不需要重装：下一次有人问「第 20 关怎么过」，
+推送之后，装过技能的人不需要重装：下一次有人问「第 21 关怎么过」，
 本地索引里没有 → 自动取远端 `levels.json` → 合并写回本地 + 补下成品图 → 秒回。
 也可以让他们手动跑一次 `python scripts/pipeline.py --sync-levels` 立刻拉全量。
 
