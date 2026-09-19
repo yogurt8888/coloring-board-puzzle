@@ -1,4 +1,4 @@
-# 维护指南（第 18 关及以后怎么加）
+# 维护指南（第 19 关及以后怎么加）
 
 这份文件是给**仓库维护者**看的。只使用技能的人不需要读 —— README 里已经说明
 「新关卡会自动同步，不用重装」。
@@ -13,7 +13,7 @@
 3. 出成品图：
 
    ```bash
-   python scripts/pipeline.py --board examples/board_level18.txt --level 18 \
+   python scripts/pipeline.py --board examples/board_level19.txt --level 19 \
        --target B --budget 5 --out assets/levels --no-cache
    ```
 
@@ -31,11 +31,11 @@
    写「第 N 步并了哪几片」之前**先跑一次**：
 
    ```bash
-   python tools/step_detail.py 17
+   python tools/step_detail.py 18
    ```
 
    它按 `levels.json` 里的 tap / seq 现算每一步并进来的原始色块（片数 / 格数 / 坐标），
-   并列出**全部可用的起点块**（写"宽容度"时要用）。
+   并列出**全部可用的起点块**与各自可行的颜色顺序（写"宽容度"时要用）。
    这一步别省：靠肉眼数格子写详解必错，本项目已经因此返工过一次。
 6. 提交推送：
 
@@ -43,7 +43,7 @@
    git add -A && git commit && git push
    ```
 
-推送之后，装过技能的人不需要重装：下一次有人问「第 18 关怎么过」，
+推送之后，装过技能的人不需要重装：下一次有人问「第 19 关怎么过」，
 本地索引里没有 → 自动取远端 `levels.json` → 合并写回本地 + 补下成品图 → 秒回。
 也可以让他们手动跑一次 `python scripts/pipeline.py --sync-levels` 立刻拉全量。
 

@@ -77,10 +77,11 @@ def analyze(meta):
     for ci2, seqs in sorted(by_comp.items(), key=lambda kv: m2.comp_first[kv[0]]):
         cells = sorted((y + 1, x + 1) for y, x in m2.comps[ci2])
         # by_comp[ci] 的每一项是 (seq, frames, sizes) 三元组，seq 才是颜色索引序列
-        orders = "、".join("".join(NAMES.get(colors[c], colors[c]) for c in item[0])
-                           for item in seqs[:2])
-        print("    块 %d 格 %s%s｜可行顺序: %s"
-              % (len(cells), cells, " ←推荐" if ci2 == ci else "", orders))
+        shown = "、".join("".join(NAMES.get(colors[c], colors[c]) for c in item[0])
+                          for item in seqs[:2])
+        more = "" if len(seqs) <= 2 else "…（共 %d 条）" % len(seqs)
+        print("    块 %d 格 %s%s｜可行顺序: %s%s"
+              % (len(cells), cells, " ←推荐" if ci2 == ci else "", shown, more))
 
 
 def main():
