@@ -21,10 +21,18 @@ SKILL_ROOT = os.path.dirname(HERE)
 LEVELS_DIR = os.path.join(SKILL_ROOT, "assets", "levels")
 INDEX_PATH = os.path.join(LEVELS_DIR, "levels.json")
 
-#: 远端索引地址（默认指向本项目的 GitHub raw）。
-#: 想自建镜像/内网分发：设环境变量 CB_LEVELS_BASE 指向放 levels.json 与成品图的目录即可。
-REMOTE_BASE_DEFAULT = ("https://raw.githubusercontent.com/yogurt8888/"
-                       "coloring-board-puzzle/main/assets/levels")
+#: 远端索引的候选地址（按顺序尝试，用上第一个能连通的）。
+#: raw.githubusercontent.com 是官方源，但在国内经常超时/被阻断；jsDelivr 是可直取的 GitHub 镜像，
+#: 实测国内可达性好得多，所以排在第一备选。
+#: 想自建镜像/内网分发：设环境变量 CB_LEVELS_BASE —— **一旦设置就只用它**，不再回落到公网源。
+REMOTE_BASES_DEFAULT = (
+    "https://raw.githubusercontent.com/yogurt8888/"
+    "coloring-board-puzzle/main/assets/levels",
+    "https://cdn.jsdelivr.net/gh/yogurt8888/"
+    "coloring-board-puzzle@main/assets/levels",
+    "https://fastly.jsdelivr.net/gh/yogurt8888/"
+    "coloring-board-puzzle@main/assets/levels",
+)
 DEFAULT_TIMEOUT = 4.0
 COOLDOWN_HOURS = 6                      # 联网失败后的冷却时间，免得离线用户每次都干等
 COOLDOWN_PATH = os.path.join(LEVELS_DIR, ".sync_cooldown")
@@ -129,8 +137,20 @@ def offline():
     return os.environ.get("CB_OFFLINE", "").strip().lower() not in ("", "0", "false", "no")
 
 
+def remote_bases():
+    """本次同步要依次尝试的候选地址。
+
+    设了 CB_LEVELS_BASE（自建镜像 / 内网分发）就**只用它** —— 内网环境不该偷偷回落到公网。
+    """
+    env = os.environ.get("CB_LEVELS_BASE", "").strip()
+    if env:
+        return [env.rstrip("/")]
+    return [u.rstrip("/") for u in REMOTE_BASES_DEFAULT]
+
+
 def remote_base():
-    return os.environ.get("CB_LEVELS_BASE", REMOTE_BASE_DEFAULT).rstrip("/")
+    """候选里的第一个（保留旧接口，给只想看主源的地方用）。"""
+    return remote_bases()[0]
 
 
 def _get(url, timeout=DEFAULT_TIMEOUT):
@@ -189,13 +209,22 @@ def sync_remote(level=None, timeout=DEFAULT_TIMEOUT, log=None, force=False):
     if not force and _cooldown_active():
         return "offline", "距上次联网失败不足 %d 小时，跳过远端同步" % COOLDOWN_HOURS
 
-    base = remote_base()
-    try:
-        remote = json.loads(_get(base + "/levels.json", timeout).decode("utf-8"))
-    except Exception as e:
-        say("远端索引不可用：%s" % e)
+    bases = remote_bases()
+    remote, base, errs = None, None, []
+    for b in bases:
+        try:
+            remote = json.loads(_get(b + "/levels.json", timeout).decode("utf-8"))
+            base = b
+            break
+        except Exception as e:
+            errs.append("%s（%s）" % (b.split("//")[-1].split("/")[0], e))
+    if remote is None:
+        detail = "；".join(errs) or "没有可用地址"
+        say("远端索引不可用：" + detail)
         _mark_cooldown()
-        return "error", "远端索引不可用（%s）" % e
+        return "error", "远端索引不可用（%s）" % detail
+    if base != bases[0]:
+        say("主源不可用，已回落到镜像：%s" % base)
 
     try:
         rlv = remote.get("levels") or {}

@@ -81,10 +81,13 @@
   失败后冷却 6 小时不再重试，免得离线用户每次都等超时；
 - 想手动拉最新：`python scripts/pipeline.py --sync-levels`；
 - 想彻底离线：`--no-sync`，或设环境变量 `CB_OFFLINE=1`；
-- 自建镜像 / 内网分发：设 `CB_LEVELS_BASE` 指向放 `levels.json` 和成品图的目录。
+- 自建镜像 / 内网分发：设 `CB_LEVELS_BASE` 指向放 `levels.json` 和成品图的目录
+  （**设了就只用它**，不会再回落到公网源）。
 
-> 联网只发生在「本地查不到这一关」时，且只访问 `raw.githubusercontent.com` 这一个域名，
-> 只写入 `assets/levels/` 这一个目录。
+> 联网只发生在「本地查不到这一关」时，只写 `assets/levels/` 这一个目录。
+> 取索引时会**依次尝试**：GitHub 官方 raw → `cdn.jsdelivr.net`（国内可达性好，作第一备选）
+> → `fastly.jsdelivr.net`，用上第一个能连通的；所以就算本地网络访问不了 raw.githubusercontent.com，
+> 新关卡照样能自动同步。
 
 ---
 

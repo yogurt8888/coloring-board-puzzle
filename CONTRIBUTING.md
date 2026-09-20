@@ -78,8 +78,10 @@
   不做降级。**连跑两次 `build_level_index.py` 会让 version 跳过若干号（无副作用，用户端只比大小），
   但正式发布前建议只跑一次。**
 - 索引条目带 63 格逐格指纹，合并时按指纹与关号双重判断，不会把已有关卡覆盖坏。
-- 远端地址默认取 `raw.githubusercontent.com`；改域名 / 自建镜像设 `CB_LEVELS_BASE`
-  指向放 `levels.json` 与成品图的目录即可。
+- 远端地址候选（`scripts/level_index.py` 的 `REMOTE_BASES_DEFAULT`）：
+  `raw.githubusercontent.com` → `cdn.jsdelivr.net` → `fastly.jsdelivr.net`，依次尝试、用上第一个能连通的。
+  **国内网络下 raw 经常超时（实测 curl 直接 000），所以镜像不是可选项而是主力**；
+  改域名 / 自建镜像设 `CB_LEVELS_BASE` 指向放 `levels.json` 与成品图的目录即可（设了就只用它）。
 
 ---
 
