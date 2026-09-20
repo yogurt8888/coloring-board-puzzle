@@ -58,8 +58,9 @@ agent_created: true
   「远端同步：…」说明原因，此时再按"这关没解过"处理（要图求解）；
 - 手动拉全量：`python scripts/pipeline.py --sync-levels`；
 - 用户明确要离线：`--no-sync`，或环境变量 `CB_OFFLINE=1`；
-- 依次尝试 `raw.githubusercontent.com` → `cdn.jsdelivr.net` → `fastly.jsdelivr.net`（镜像回落，
-  raw 在国内常不可达），只写 `assets/levels/` 一个目录。
+- 依次尝试 `raw.githubusercontent.com` → `ghfast.top` / `gh-proxy.com`（实时反代）→
+  `cdn.jsdelivr.net`（有缓存，兜底），并且**内容比本地新才采纳**（避免被 CDN 缓存骗到），
+  只写 `assets/levels/` 一个目录。
 
 ## 安装与依赖
 

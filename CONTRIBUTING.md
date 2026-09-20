@@ -79,8 +79,11 @@
   但正式发布前建议只跑一次。**
 - 索引条目带 63 格逐格指纹，合并时按指纹与关号双重判断，不会把已有关卡覆盖坏。
 - 远端地址候选（`scripts/level_index.py` 的 `REMOTE_BASES_DEFAULT`）：
-  `raw.githubusercontent.com` → `cdn.jsdelivr.net` → `fastly.jsdelivr.net`，依次尝试、用上第一个能连通的。
-  **国内网络下 raw 经常超时（实测 curl 直接 000），所以镜像不是可选项而是主力**；
+  `raw.githubusercontent.com` → `ghfast.top` 反代 → `gh-proxy.com` 反代 → `cdn.jsdelivr.net`，
+  依次尝试、**并要求内容比本地新才采纳**（够新就停）。两条实测经验（2026-09-21）：
+  ① raw 在国内经常直接超时（curl 000），所以反代不是可选项而是主力；
+  ② jsDelivr 有**小时级缓存**，刚推的新关卡它可能还返回旧索引 —— 所以它排最后，
+  而且脚本会把"能取到但版本不够新"的源当作不可用继续换下一个，不会误报 nochange。
   改域名 / 自建镜像设 `CB_LEVELS_BASE` 指向放 `levels.json` 与成品图的目录即可（设了就只用它）。
 
 ---

@@ -87,9 +87,10 @@
   （**设了就只用它**，不会再回落到公网源）。
 
 > 联网只发生在「本地查不到这一关」时，只写 `assets/levels/` 这一个目录。
-> 取索引时会**依次尝试**：GitHub 官方 raw → `cdn.jsdelivr.net`（国内可达性好，作第一备选）
-> → `fastly.jsdelivr.net`，用上第一个能连通的；所以就算本地网络访问不了 raw.githubusercontent.com，
-> 新关卡照样能自动同步。
+> 取索引时会**依次尝试**：GitHub 官方 raw → `ghfast.top` / `gh-proxy.com` 实时反代 →
+> `cdn.jsdelivr.net`（有小时级缓存，只作兜底），并且**要求内容比本地新**才采纳 ——
+> 所以本地网络连不上 raw.githubusercontent.com 时，新关卡照样能自动同步；
+> 某个镜像返回的是缓存旧版本时，脚本会自动换下一个源，不会误判成"远端没有更新"。
 
 ---
 

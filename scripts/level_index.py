@@ -21,16 +21,19 @@ SKILL_ROOT = os.path.dirname(HERE)
 LEVELS_DIR = os.path.join(SKILL_ROOT, "assets", "levels")
 INDEX_PATH = os.path.join(LEVELS_DIR, "levels.json")
 
-#: 远端索引的候选地址（按顺序尝试，用上第一个能连通的）。
-#: raw.githubusercontent.com 是官方源，但在国内经常超时/被阻断；jsDelivr 是可直取的 GitHub 镜像，
-#: 实测国内可达性好得多，所以排在第一备选。
+#: 远端索引的候选地址（按顺序尝试，用上第一个能连通**且内容够新**的）。
+#: raw.githubusercontent.com 是官方源但在国内经常超时/被阻断；
+#: ghfast.top、gh-proxy.com 是实时反向代理（实测能立刻拿到最新推送）；
+#: jsDelivr 可用但**有小时级缓存**，只能兜底，所以排在最后。
 #: 想自建镜像/内网分发：设环境变量 CB_LEVELS_BASE —— **一旦设置就只用它**，不再回落到公网源。
 REMOTE_BASES_DEFAULT = (
     "https://raw.githubusercontent.com/yogurt8888/"
     "coloring-board-puzzle/main/assets/levels",
+    "https://ghfast.top/https://raw.githubusercontent.com/yogurt8888/"
+    "coloring-board-puzzle/main/assets/levels",
+    "https://gh-proxy.com/https://raw.githubusercontent.com/yogurt8888/"
+    "coloring-board-puzzle/main/assets/levels",
     "https://cdn.jsdelivr.net/gh/yogurt8888/"
-    "coloring-board-puzzle@main/assets/levels",
-    "https://fastly.jsdelivr.net/gh/yogurt8888/"
     "coloring-board-puzzle@main/assets/levels",
 )
 DEFAULT_TIMEOUT = 4.0
@@ -210,28 +213,44 @@ def sync_remote(level=None, timeout=DEFAULT_TIMEOUT, log=None, force=False):
         return "offline", "距上次联网失败不足 %d 小时，跳过远端同步" % COOLDOWN_HOURS
 
     bases = remote_bases()
-    remote, base, errs = None, None, []
+    cur = load()
+    cver = int(cur.get("version", 0))
+
+    # 逐个源试：既要能连通，**内容也得够新**。
+    # 这一条很重要：jsDelivr 这类 CDN 会缓存几小时，光看"能取到"就采纳，
+    # 会出现「远端明明有新关卡、脚本却说版本不高于本地」的假 nochange（2026-09-21 实测踩到）。
+    remote, base, errs, stale = None, None, [], []
     for b in bases:
         try:
-            remote = json.loads(_get(b + "/levels.json", timeout).decode("utf-8"))
-            base = b
-            break
+            got = json.loads(_get(b + "/levels.json", timeout).decode("utf-8"))
         except Exception as e:
             errs.append("%s（%s）" % (b.split("//")[-1].split("/")[0], e))
+            continue
+        rver_try = int(got.get("version", 0) or 0)
+        rlv_try = got.get("levels") or {}
+        fresh = force or rver_try > cver or (level is not None and str(level) in rlv_try)
+        if fresh:
+            remote, base = got, b
+            if b != bases[0]:
+                say("主源不可用或内容滞后，已改用：%s" % b)
+            break
+        stale.append("%s（v%d）" % (b.split("//")[-1].split("/")[0], rver_try))
+
     if remote is None:
+        if stale and not errs:
+            return "nochange", "各镜像的索引都不比本地新：%s" % "、".join(stale)
+        if stale:
+            return "nochange", "能取到索引但内容滞后（%s），其余源不可用：%s" % (
+                "、".join(stale), "；".join(errs))
         detail = "；".join(errs) or "没有可用地址"
         say("远端索引不可用：" + detail)
         _mark_cooldown()
         return "error", "远端索引不可用（%s）" % detail
-    if base != bases[0]:
-        say("主源不可用，已回落到镜像：%s" % base)
 
     try:
         rlv = remote.get("levels") or {}
         if not rlv:
             return "error", "远端索引为空"
-        cur = load()
-        cver = int(cur.get("version", 0))
         rver = int(remote.get("version", 0))
         if not force and rver <= cver:
             return "nochange", "远端索引版本 %d 不高于本地 %d" % (rver, cver)
