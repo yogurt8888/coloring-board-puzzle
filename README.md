@@ -3,7 +3,7 @@
 给 AI Agent 用的技能：**发一张「画盘 / 染色棋盘」小游戏截图，或直接说"第 8 关怎么过"，
 自动产出通关步骤 + 一张统一格式的通关路线图。**
 
-纯 Python，只依赖 Pillow，Windows / macOS / Linux 通用。已经内置第 1~22 关的答案，
+纯 Python，只依赖 Pillow，Windows / macOS / Linux 通用。已经内置第 1~23 关的答案，
 重复的关卡和直接报关卡号都是秒回。
 
 ---
@@ -31,7 +31,7 @@
 
 ---
 
-## 已解关卡（第 1~22 关）
+## 已解关卡（第 1~23 关）
 
 9 列 × 7 行 = 63 格，4 色（红黄蓝绿）。行列从 1 计。
 
@@ -59,6 +59,7 @@
 | 20 | 红 | 5 / 5 | 第4行第3列 | 红 → 蓝 → 绿 → 黄 → 红 | 2 → 21 → 33 → 49 → 59 |
 | 21 | 红 | 5 / 5 | 第4行第5列 | 绿 → 黄 → 蓝 → 绿 → 红 | 1 → 5 → 15 → 18 → 52 |
 | 22 | 绿 | 5 / 5 | 第1行第4列 | 绿 → 红 → 黄 → 蓝 → 绿 | 5 → 19 → 23 → 41 → 59 |
+| 23 | 黄 | 5 / 5 | 第6行第4列 | 黄 → 绿 → 红 → 蓝 → 黄 | 8 → 15 → 47 → 56 → 58 |
 
 成品图在 `assets/levels/`，逐关对应。
 
@@ -68,7 +69,7 @@
 ### 关卡会自动更新，不用重装
 
 > **已实装：最新关卡自动更新。** 装过 skill 的人**不用重装、也不用升级** ——
-> 以新出的关卡为例，那天你问一句「第 23 关怎么过」，
+> 以新出的关卡为例，那天你问一句「第 24 关怎么过」，
 > 就会自动同步到这一关，然后照常给答案。想立刻拉一次全量也行：
 > `python scripts/pipeline.py --sync-levels`。
 
@@ -77,7 +78,7 @@
 - 本地索引里没有这一关时 → 脚本联网取一次远端
   `assets/levels/levels.json`（约 4 KB），版本更新就合并写回本地，
   并把缺的成品图（约 100~200 KB）下载到 `assets/levels/`，然后照常秒回；
-- 本地已经有的关卡（1~22 关这种）**完全不联网**，仍是 0.05 秒；
+- 本地已经有的关卡（1~23 关这种）**完全不联网**，仍是 0.05 秒；
 - 断网或远端不可用时**静默降级**：照常走本地索引或完整求解，不会报错；
   失败后冷却 6 小时不再重试，免得离线用户每次都等超时；
 - 想手动拉最新：`python scripts/pipeline.py --sync-levels`；
@@ -111,7 +112,7 @@ python tools/selfcheck.py                # 自检：环境 / 字体 / 索引 / �
 
 ```bash
 # 1) 从截图求解（最常用）
-python scripts/pipeline.py --img 截图.png --level 22 --target G --budget 5 \
+python scripts/pipeline.py --img 截图.png --level 23 --target Y --budget 5 \
     --expect-cols 9 --expect-rows 7 --out .
 
 # 2) 只报关号，取已解存档（秒回，不重算）
@@ -179,8 +180,8 @@ python scripts/pipeline.py --board board8.txt --level 8 --out .
 │   └── solve.py               ← 早期实现，仅留档
 ├── assets/
 │   ├── fonts/                 ← 自带中文字体（OFL-1.1）+ 许可原文
-│   └── levels/                ← 22 关成品图 + levels.json 索引
-├── examples/                  ← 22 关棋盘存档（board_level1..22.txt）
+│   └── levels/                ← 23 关成品图 + levels.json 索引
+├── examples/                  ← 23 关棋盘存档（board_level1..23.txt）
 ├── tools/
 │   ├── selfcheck.py           ← 自检：环境 / 字体 / 索引 / 三道校验
 │   ├── build_level_index.py   ← 从棋盘现算并重建关卡索引
